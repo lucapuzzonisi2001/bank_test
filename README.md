@@ -10,3 +10,5 @@ Le librerie esterne utilizzate sono state GSON, Lombok e slf4j per il logging.
 Github: https://github.com/lucapuzzonisi2001/bank_test
 
 inMemoryDB: http://localhost:9000/h2-console
+
+Postman API collection: https://www.getpostman.com/collections/aafbdd8146b031ad7956
