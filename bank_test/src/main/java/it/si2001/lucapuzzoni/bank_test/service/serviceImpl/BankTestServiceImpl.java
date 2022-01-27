@@ -2,6 +2,7 @@ package it.si2001.lucapuzzoni.bank_test.service.serviceImpl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import it.si2001.lucapuzzoni.bank_test.enitity.MoneyTransfer;
 import it.si2001.lucapuzzoni.bank_test.enitity.Transaction;
@@ -43,7 +44,7 @@ public class BankTestServiceImpl implements BankTestService{
      * @return Una Map con il risultato della chiamata API
      */
     @Override
-    public Map getSaleRead(Long accountID) {
+    public Map getSaleRead(Long accountID) throws RestClientException {
         String url = String.format("%s%d%s", this.baseUrl, accountID, this.saleRead);
         logger.info(String.format("Request to: %s", url));
         Map response = rt.exchange(url, HttpMethod.GET, restTemplateUtil.getHttpEntity(), Map.class).getBody();
@@ -57,7 +58,7 @@ public class BankTestServiceImpl implements BankTestService{
      * @return Una Map con il risultato della chiamata API
      */
     @Override
-    public Map getTransactionsRead(Long accountID, String dateFrom, String dateTo) {
+    public Map getTransactionsRead(Long accountID, String dateFrom, String dateTo) throws RestClientException {
         String url = String.format("%s%d%s?fromAccountingDate=%s&toAccountingDate=%s", this.baseUrl, accountID, this.transactionsRead, dateFrom, dateTo);
         logger.info(String.format("Request to: %s", url));
 
@@ -85,7 +86,7 @@ public class BankTestServiceImpl implements BankTestService{
      * @throws JsonMappingException
      */
     @Override
-    public Map performMoneyTransfer(Long accountID, MoneyTransfer paylaod) throws JsonMappingException, JsonProcessingException {
+    public Map performMoneyTransfer(Long accountID, MoneyTransfer paylaod) throws JsonMappingException, JsonProcessingException, RestClientException {
         try{
             String url = String.format("%s%d%s", this.baseUrl, accountID, this.moneyTransfer);
             logger.info(String.format("Request to: %s", url));

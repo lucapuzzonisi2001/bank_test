@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
+
 import it.si2001.lucapuzzoni.bank_test.enitity.MoneyTransfer;
 import it.si2001.lucapuzzoni.bank_test.service.BankTestService;
 
@@ -31,7 +33,11 @@ public class BankTestController {
     @GetMapping(value = "/{id}/sale")
     public ResponseEntity<?> getSale(@PathVariable("id") Long accountID){
         logger.info(String.format("Richiesta di lettura saldo su account: %d", accountID));
-        return new ResponseEntity<>(this.bankTestService.getSaleRead(accountID), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(this.bankTestService.getSaleRead(accountID), HttpStatus.OK);
+        } catch (RestClientException rce) {
+            return new ResponseEntity<>("Errore nella chiamata remota..", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -41,7 +47,12 @@ public class BankTestController {
     @GetMapping(value = "/{id}/transactions/{dateFrom}/{dateTo}")
     public ResponseEntity<?> getTransactions(@PathVariable("id") Long accountID, @PathVariable("dateFrom") String dateFrom, @PathVariable("dateTo") String dateTo){
         logger.info(String.format("Richiesta di lettura transazioni su account: %d Da %s A %s", accountID, dateFrom, dateTo));
-        return new ResponseEntity<>(this.bankTestService.getTransactionsRead(accountID, dateFrom, dateTo), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(this.bankTestService.getTransactionsRead(accountID, dateFrom, dateTo), HttpStatus.OK);
+        } catch (RestClientException rce) {
+            return new ResponseEntity<>("Errore nella chiamata remota..", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
     /**
